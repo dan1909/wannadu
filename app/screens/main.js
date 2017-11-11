@@ -21,11 +21,11 @@ export default class Main extends Component {
     this.questions = []
   }
 
-  componentDidMount() {
-    questionService.getQuestions().then((questions) => {
-      this.questions = questions
-      this.setState({ isLoading: false })
-    })
+  async componentDidMount() {
+    const questions = await questionService.getQuestions()
+    console.log("!!!!!! questions", questions)
+    this.questions = questions
+    this.setState({ isLoading: false })
   }
 
   answerClicked = () => {

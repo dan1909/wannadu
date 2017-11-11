@@ -9,5 +9,6 @@ var AnswerSchema = new Schema({
   createdAt: {type: Date, default: Date.now, required: true},
   totalCount: {type: Number, default: 0, required: true},
 })
+
 //Export model
 module.exports = mongoose.model('Answer', AnswerSchema)

@@ -1,8 +1,21 @@
+import { AsyncStorage } from 'react-native'
+const consts = require('../consts')
+
 getQuestions = async () => {
   try {
-    const response = await fetch('http://localhost:3000/questions')
+    // const response = await fetch('http://localhost:3000/questions')
+    const token = await AsyncStorage.getItem(consts.TOKEN_KEY)
+    const response = await fetch('http://localhost:3000/questions', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      }
+    })
+    console.log("!!!!!! get_questions", response)
     if (response !== null && response.status == 200){
-      console.log("!!!!!! get_questions", response)
+
       const questions = await response.json() || []
       return questions
     }

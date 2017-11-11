@@ -37,10 +37,11 @@ passport.use(new FacebookStrategy(facebookConfig,
 
 passport.use(new JwtStrategy(jwtConfig,
   async (payload, done) => {
-    console.log("payload!!!!", payload)
+    
     // Check if user exists, if so return status ok (done(null, user))
     const user = await User.findOne(mongoose.Types.ObjectId(payload.sub)).exec()
     if (user) {
+
         return done(null, user, payload);
     }
     // No user found, return 401 (unauthorized)
