@@ -7,78 +7,49 @@ var mongoDB = 'mongodb://localhost/wannadu'
 mongoose.connect(mongoDB, {useMongoClient: true})
 var db = mongoose.connection;
 
-// var user = new User ({
-//   first_name: 'Dan',
-//   last_name: 'Kowarsky',
-//   age: 32,
-//   sex: 'MALE',
-//   email: 'Dan.kowarsky.gmail.com',
-// })
-// User.findOneOrCreate({'email': 'Dan.kowarsky.gmail.com'}, user, function (err, res) {
-//   if (err)
-//     console.log ('Error on save!', err)
-//   if (res)
-//     console.log ('res', res)
-// })
-const getUser = async () => {
-  try {
+const createQuestion = async (questionObj) => {
 
+  try {
+    console.log("!!!!!!! questionObj", questionObj)
     const user = await User.findOne({'email': 'dankovarski@gmail.com'})
-    console.log("!!!!!!! user", user)
-    const answer = new Answer({
-            content: 'This is a test of mongoose ref',
-            properties: {'Mongoose': 1},
-            createdBy: user._id
-    })
-    answer.save()
+    let answers = questionObj.answers
+    let question = questionObj.question
 
-  } catch (e) {
-    console.log("!!!!!!! e", e)
+    if (question.answers == null) {
+        question.answers = []
+    }
+    question.createdBy = user._id
+    if (answers == null || answers.length < 2) {
+      console.log("illegal answer fortmat ", answers)
+    }
+
+    const answersInDB = await Answer.insertMany(answers)
+
+    for (let answerInDb of answersInDB) {
+      question.answers.push(answerInDb._id)
+    }
+
+    question = new Question(question)
+    const response = await question.save()
+
+    console.log("Success!!")
+    process.exit()
+
+  } catch (error) {
+    console.log("createQuestion:: error", error)
+    process.exit()
   }
 }
 
-const getAnswer = async () => {
-  try {
-
-    const answer = await Answer.findOne({'content': 'This is a test of mongoose ref'}).
-                  populate('createdBy', 'firstName')
-    // console.log("!!! answer BEFORE", answer)
-    // answer = answer.populate('createdBy')
-    console.log("!!! answer AFTER ", answer)
-    return
-
-  } catch (e) {
-    console.log ("!!!!!!!!! e", e)
-  }
-
+const questionObj = {
+  question: {type: 'SYSTEM'},
+  answers: [{content: 'Beer', type: 'TEXT', properties: {'alcohol': 1}},
+            {content: 'Coca Cola', type: 'TEXT', properties: {'sweet tooth': 1}}]
 }
+// const questionObj = {
+//   question: {type: 'FUN'},
+//   answers: [{content: 'rihana', type: 'IMAGE', properties: {'cool': 1}},
+//             {content: 'katie_perry', type: 'IMAGE', properties: {'home': 1}}]
+// }
 
-getAnswer()
-// getUser()
-
-
-// var answer_1 = new Answer ({
-//   content: 'katie_perry',
-//   properties: {'test': true},
-//   created_by: 1,
-// })
-// var answer_2 = new Answer ({
-//   content: 'rihana',
-//   properties: {'test2': true},
-//   created_by: 1,
-// })
-//
-// Answer.insertMany([answer_1, answer_2]).then(function(res) {
-//   console.log ('!!!! res', res)
-// })
-
-// var question = new Question ({
-//   content: 'Rihana or Katie',
-//   answers: ['ObjectId("59e90546b637a022a4d8a54c")', 'ObjectId("59e90546b637a022a4d8a54d")'],
-//   created_by: 1,
-//   exp_date: 14,
-//   type: 'fun',
-// })
-// question.save().then(function(res) {
-//   console.log ('!!!! res', res)
-// })
+createQuestion(questionObj)
