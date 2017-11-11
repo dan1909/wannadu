@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
   Text,
   View,
   TouchableHighlight,
   Image,
-  Button,
 } from 'react-native';
+import Answer from '../components/answerComponent'
 
 const imageService = require('../images/imageService')
 const styles = require('../styles/styles')
 const questionService = require('../utils/questionService')
 
+
 export default class Main extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {'qIndex': 0, 'isLoading': true}
+    this.state = {'qIndex': 0, 'isLoading': true, 'result': []}
     this.questions = []
   }
 
@@ -27,7 +26,12 @@ export default class Main extends Component {
     this.setState({ isLoading: false })
   }
 
-  answerClicked = () => {
+  answerClicked = (answerId) => {
+    // this.setState((prevState) => ({
+    //   result: prevState.result.push({'question':this.questions[this.state.qIndex]._id,
+    //                                 'answer': answerId})
+    // }))
+
     this.advanceIndex()
   }
 
@@ -47,39 +51,39 @@ export default class Main extends Component {
 
   }
 
-  getQuestionAreaForImage = () => {
-    imageAnswersArr = this.questions[this.state.qIndex].answers.map((answer, i) =>
-      (<TouchableHighlight
-        key={i}
-        onPress={this.answerClicked}
-        style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={imageService.getImage(answer.content)}
-        />
-      </TouchableHighlight>)
-    )
-    return (<View style={styles.selectionArea}>
-              <View style={styles.imageSelectionArea}>
-                {imageAnswersArr}
-              </View>
-            </View>)
-  }
-
-  getQuestionAreaForText = () => {
-    textAnswersArr = this.questions[this.state.qIndex].answers.map((answer, i) =>
-      (<TouchableHighlight
-        key={i}
-        onPress={this.answerClicked}
-        style={[styles.button, {backgroundColor: answer.backgroundColor}]}>
-        <Text style={styles.buttonText}>{answer.content}</Text>
-      </TouchableHighlight>)
-    )
-
-    return (<View style={styles.selectionArea}>
-              {textAnswersArr}
-            </View>)
-  }
+  // getQuestionAreaForImage = () => {
+  //   imageAnswersArr = this.questions[this.state.qIndex].answers.map((answer, i) =>
+  //     (<TouchableHighlight
+  //       key={i}
+  //       onPress={this.answerClicked}
+  //       style={styles.imageContainer}>
+  //       <Image
+  //         style={styles.image}
+  //         source={imageService.getImage(answer.content)}
+  //       />
+  //     </TouchableHighlight>)
+  //   )
+  //   return (<View style={styles.selectionArea}>
+  //             <View style={styles.imageSelectionArea}>
+  //               {imageAnswersArr}
+  //             </View>
+  //           </View>)
+  // }
+  //
+  // getQuestionAreaForText = () => {
+  //   textAnswersArr = this.questions[this.state.qIndex].answers.map((answer, i) =>
+  //     (<TouchableHighlight
+  //       key={i}
+  //       onPress={this.answerClicked}
+  //       style={[styles.button, {backgroundColor: answer.backgroundColor}]}>
+  //       <Text style={styles.buttonText}>{answer.content}</Text>
+  //     </TouchableHighlight>)
+  //   )
+  //
+  //   return (<View style={styles.selectionArea}>
+  //             {textAnswersArr}
+  //           </View>)
+  // }
 
   render() {
     if (!this.state.isLoading) {
@@ -87,16 +91,18 @@ export default class Main extends Component {
       // if (this.questions[this.state.qIndex].question.type == 'text'){
         // QuestionArea = this.getQuestionAreaForText()
       // } else {
-      QuestionArea = this.getQuestionAreaForImage()
+      // QuestionArea = this.getQuestionAreaForImage()
       // }
       return (
         <View style={styles.mainContainer}>
-          <View style={styles.questionContainer}>
+          {/* <View style={styles.questionContainer}>
             <Text style={styles.questionText}>
               {this.questions[this.state.qIndex].question.content}
             </Text>
-          </View>
-            {QuestionArea}
+          </View> */}
+          {this.questions[this.state.qIndex].answers.map((prop, key) => {
+              return (<Answer key={key} answer={prop} onPress={this.answerClicked}></Answer>)
+          })}
             <TouchableHighlight
               onPress={this.postQuestion}>
               <Text style={styles.buttonText}>+</Text>

@@ -5,13 +5,14 @@ import mongoose from 'mongoose'
 
 exports.getQuestionsList = async (req, res) => {
   try {
-    
+
     // Get questions from DB
     const questions = await Question.find().exec()
-    let answerArr = []
+
     let dataForClient = []
     for (const [index, question] of questions.entries()) {
-
+      let answerArr = []
+      
       // Get all answers for this question
       for (let answerId of question.answers) {
 
