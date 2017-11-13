@@ -11,7 +11,6 @@ const imageService = require('../images/imageService')
 const styles = require('../styles/styles')
 const questionService = require('../utils/questionService')
 
-
 export default class Main extends Component {
 
   constructor(props) {
@@ -26,11 +25,15 @@ export default class Main extends Component {
     this.setState({ isLoading: false })
   }
 
-  answerClicked = (answerId) => {
-    // this.setState((prevState) => ({
-    //   result: prevState.result.push({'question':this.questions[this.state.qIndex]._id,
-    //                                 'answer': answerId})
-    // }))
+  answerClicked = async (answerId) => {
+    const currentQuestionId = this.questions[this.state.qIndex].question._id
+    const data = {
+      'question':currentQuestionId,
+      'answer': answerId
+    }
+    // Update user result array with question and answer, and update data in DB
+    this.setState((prevState) => {result: prevState.result.push(data)})
+    questionService.postAnswer(data)
 
     this.advanceIndex()
   }
@@ -45,61 +48,15 @@ export default class Main extends Component {
         qIndex: prevState.qIndex + 1
       }))
     } else {
-      console.log ("!!!!!", this.props)
       this.props.navigation.navigate('Result', 'result')
     }
-
   }
-
-  // getQuestionAreaForImage = () => {
-  //   imageAnswersArr = this.questions[this.state.qIndex].answers.map((answer, i) =>
-  //     (<TouchableHighlight
-  //       key={i}
-  //       onPress={this.answerClicked}
-  //       style={styles.imageContainer}>
-  //       <Image
-  //         style={styles.image}
-  //         source={imageService.getImage(answer.content)}
-  //       />
-  //     </TouchableHighlight>)
-  //   )
-  //   return (<View style={styles.selectionArea}>
-  //             <View style={styles.imageSelectionArea}>
-  //               {imageAnswersArr}
-  //             </View>
-  //           </View>)
-  // }
-  //
-  // getQuestionAreaForText = () => {
-  //   textAnswersArr = this.questions[this.state.qIndex].answers.map((answer, i) =>
-  //     (<TouchableHighlight
-  //       key={i}
-  //       onPress={this.answerClicked}
-  //       style={[styles.button, {backgroundColor: answer.backgroundColor}]}>
-  //       <Text style={styles.buttonText}>{answer.content}</Text>
-  //     </TouchableHighlight>)
-  //   )
-  //
-  //   return (<View style={styles.selectionArea}>
-  //             {textAnswersArr}
-  //           </View>)
-  // }
 
   render() {
     if (!this.state.isLoading) {
 
-      // if (this.questions[this.state.qIndex].question.type == 'text'){
-        // QuestionArea = this.getQuestionAreaForText()
-      // } else {
-      // QuestionArea = this.getQuestionAreaForImage()
-      // }
       return (
         <View style={styles.mainContainer}>
-          {/* <View style={styles.questionContainer}>
-            <Text style={styles.questionText}>
-              {this.questions[this.state.qIndex].question.content}
-            </Text>
-          </View> */}
           {this.questions[this.state.qIndex].answers.map((prop, key) => {
               return (<Answer key={key} answer={prop} onPress={this.answerClicked}></Answer>)
           })}

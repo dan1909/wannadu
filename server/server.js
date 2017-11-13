@@ -37,7 +37,7 @@ passport.use(new FacebookStrategy(facebookConfig,
 
 passport.use(new JwtStrategy(jwtConfig,
   async (payload, done) => {
-    
+
     // Check if user exists, if so return status ok (done(null, user))
     const user = await User.findOne(mongoose.Types.ObjectId(payload.sub)).exec()
     if (user) {
@@ -67,6 +67,7 @@ app.get('/auth/facebook/callback',
 
 app.use('/questions', require('./routes/questions'))
 app.use('/user', require('./routes/user'))
+app.use('/answers', require('./routes/answers'))
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {

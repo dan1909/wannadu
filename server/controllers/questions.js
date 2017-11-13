@@ -1,6 +1,5 @@
 var Question = require('../models/question')
 var Answer = require('../models/answer')
-import mockData from '../MOCK_DATA'
 import mongoose from 'mongoose'
 
 exports.getQuestionsList = async (req, res) => {
@@ -12,7 +11,7 @@ exports.getQuestionsList = async (req, res) => {
     let dataForClient = []
     for (const [index, question] of questions.entries()) {
       let answerArr = []
-      
+
       // Get all answers for this question
       for (let answerId of question.answers) {
 
@@ -26,7 +25,7 @@ exports.getQuestionsList = async (req, res) => {
 
     // If no questions, return mockData for now....
     if (questions.length == 0) {
-      res.send(JSON.stringify(mockData))
+      res.send(JSON.stringify([]))
     } else {
       res.send(JSON.stringify(dataForClient))
     }

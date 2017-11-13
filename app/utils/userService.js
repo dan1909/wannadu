@@ -29,19 +29,4 @@ isLoggedIn = async () => {
   }
 }
 
-postQuestion = async () => {
-  const response = await fetch('http://localhost:3000/questions', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      firstParam: 'yourValue',
-      secondParam: 'yourOtherValue',
-    })
-  })
-}
-
 exports.isLoggedIn = isLoggedIn
-exports.postQuestion = postQuestion

@@ -13,7 +13,6 @@ getQuestions = async () => {
         'Authorization': 'Bearer ' + token,
       }
     })
-    console.log("!!!!!! get_questions", response)
     if (response !== null && response.status == 200){
 
       const questions = await response.json() || []
@@ -40,5 +39,20 @@ postQuestion = async () => {
   })
 }
 
+postAnswer = async (data) => {
+  console.log("!!!!!! postAnswer", data)
+  const token = await AsyncStorage.getItem(consts.TOKEN_KEY)
+  const response = await fetch('http://localhost:3000/answers', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+    body: JSON.stringify(data)
+  })
+}
+
 exports.getQuestions = getQuestions
 exports.postQuestion = postQuestion
+exports.postAnswer = postAnswer
