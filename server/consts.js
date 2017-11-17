@@ -1,0 +1,1 @@
+exports.minQuestionsForSuggestion = 0

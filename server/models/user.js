@@ -12,7 +12,7 @@ var UserSchema = new Schema({
   phone: {type: String},
   score: {type: Number, default: 0},
   photo: {type: String},
-  properties: {type: Object, default: {}, required: true},
+  aggregatedTraits: [{ type: String }],
   source: {type: String, enum: ['FB', 'GOOGLE']},
 })
 
@@ -44,12 +44,6 @@ UserSchema.statics.updateOrCreateFbUser = async (userObj) => {
       updatedUser = await user.save()
     }
     return updatedUser
-
-    // const res = await mongoose.model('User').update({email: userObj.email},
-    //                               userObj,
-    //                               {upsert: true, setDefaultsOnInsert: true}
-    // )
-    // console.log("updateOrCreateFbUse, res", res)
 }
 
 //Export model
