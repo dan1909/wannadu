@@ -8,7 +8,7 @@ const consts = require('../consts')
 import mongoose from 'mongoose'
 
 const getBestSuggestion = async (user) => {
-  console.log("!!!!! getBestSuggestion", user)
+  // console.log("!!!!! getBestSuggestion", user)
   const suggestion = await Suggestion.find()[0]
   return suggestion
 }
@@ -36,13 +36,17 @@ const postAnswer = async (req, res) => {
     })
     userQuestion.save()
 
-    // Update the user and answer properties
+    // Update the user traits
     const answer = await Answer.findOne(mongoose.Types.ObjectId(answerId)).exec()
-    updateUserProperties(req.user, answer)
-    updateAnswerProperties(req.user, answer)
+    const answerTraits = answer.getActiveAnswerTraits()
+    req.user.updateTraits(answerTraits['positive'], answerTraits['negative'])
+
+    // Update the answer traits
+    const userTraits = req.user.getActiveUserTraits()
+    answer.udpateTraits(userTraits['positive'], userTraits['negative'])
 
     // If needed, get best suggestion for user
-    if (numQuestionAnswered > consts.minQuestionsForSuggestion) {
+    if (numQuestionAnswered > consts.MIN_QUESTIONS_FOR_SUGGESTION) {
       const suggestion = await getBestSuggestion(req.user)
       res.send(JSON.stringify(suggestion))
     } else {

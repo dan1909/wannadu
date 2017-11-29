@@ -12,7 +12,7 @@ export const facebookConfig = {
 export const jwtConfig = {
   // By default this looks for a "JWT " prefix
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  expiresIn: '1 hour',
+  expiresIn: '1 day',
   // The secret that was used to sign the JWT
   secretOrKey: 'WaNnAdUJwTsecret!1',
   issuer: 'accounts.examplesoft.com',

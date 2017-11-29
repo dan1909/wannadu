@@ -9,9 +9,7 @@ var SuggestionSchema = new Schema({
   properties: {type: Object, default: {}, required: true},
   minAge: {type: Number, default: 0, required: true},
   maxAge: {type: Number, default: 100, required: true},
-  addTraits: [{ type: String }],
-  removeTraits: [{ type: String }],
-  aggregatedTraits: [{ type: String }],
+  traits: [{ type: Object }],
   isActive: {type: Boolean, default: true, required: true},
   isPending: {type: Boolean, default: false, required: true},
 })

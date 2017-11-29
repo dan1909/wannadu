@@ -1,1 +1,2 @@
-exports.minQuestionsForSuggestion = 0
+exports.MIN_QUESTIONS_FOR_SUGGESTION = 0
+exports.UPDATE_TRAIT_THRESHOLD = 3

@@ -7,7 +7,7 @@ var QuestionSchema = new Schema({
   createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   createdAt: {type: Date, default: Date.now, required: true},
   expDate: {type: Number, default: 30, required: true}, // Days
-  type: {type: String, enum: ['SYSTEM', 'FUN'], default: 'SYSTEM', required: true},
+  // type: {type: String, enum: ['SYSTEM', 'FUN'], default: 'SYSTEM', required: true},
   totalExposures: {type: Number, default: 0, required: true},
   minAge: {type: Number, default: 0, required: true},
   maxAge: {type: Number, default: 100, required: true},
