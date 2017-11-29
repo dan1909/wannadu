@@ -1,4 +1,4 @@
-const checkTraitInListOfTraits = (targetTraitName, listOfTraits) => {
+const indexOfTrait = (targetTraitName, listOfTraits) => {
   let traitIndex = 0
   for (const traitObj of listOfTraits) {
     if (traitObj['name'] == targetTraitName) {
@@ -9,4 +9,4 @@ const checkTraitInListOfTraits = (targetTraitName, listOfTraits) => {
   return -1
 }
 
-exports.checkTraitInListOfTraits = checkTraitInListOfTraits
+exports.indexOfTrait = indexOfTrait

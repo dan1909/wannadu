@@ -13,14 +13,6 @@ const getBestSuggestion = async (user) => {
   return suggestion
 }
 
-const updateUserProperties = async (user, answer) => {
-  console.log("!!!!! updateUserProperties")
-}
-
-const updateAnswerProperties = async (user, answer) => {
-  console.log("!!!!! updateAnswerProperties")
-}
-
 const postAnswer = async (req, res) => {
   try {
     console.log("postAnswer:: data", req.body)

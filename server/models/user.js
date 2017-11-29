@@ -20,29 +20,25 @@ var UserSchema = new Schema({
 UserSchema.methods.updateTraits = function (answerPositiveTraits, answerNegativeTraits) {
   const _updateUserTraits = (answerTraits, positive) => {
     for (let trait of answerTraits) {
-      const traitIndex = GeneralUtils.checkTraitInListOfTraits(trait, this.traits)
+      const traitIndex = GeneralUtils.indexOfTrait(trait, this.traits)
 
       // Trait exists in answer, add to positive /negative
-      // TODO: DOES NOT INCREMENT IN DB
       if (traitIndex != -1) {
+        const value = this.traits[traitIndex]
+        this.traits.splice(traitIndex, 1)
+
         if (positive) {
-          // this.traits[traitIndex]['positive']++
-          const value = this.traits[traitIndex]
-          this.traits.splice(traitIndex, 1)
           this.traits.push({name: value['name'],
                             positive: value['positive'] + 1,
                             negative: value['negative'],
                             updatedAt: new Date(),
                             lastUpdate: 'positive'})
         } else {
-          const value = this.traits[traitIndex]
-          this.traits.splice(traitIndex, 1)
           this.traits.push({name: value['name'],
                             positive: value['positive'],
                             negative: value['negative'] + 1,
                             updatedAt: new Date(),
                             lastUpdate: 'negative'})
-          // this.traits[traitIndex]['negative']++
         }
       // New trait
       } else {
@@ -84,7 +80,6 @@ UserSchema.methods.getActiveUserTraits = function () {
       }
     }
   }
-  console.log("!!!! userActiveTraits", userActiveTraits)
   return userActiveTraits
 }
 
