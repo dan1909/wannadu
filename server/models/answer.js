@@ -45,13 +45,13 @@ AnswerSchema.methods.udpateTraits = function(userPositiveTraits, userNegativeTra
                             positive: value['positive'],
                             negative: value['negative'] + 1})
         }
+
       // New trait
       } else {
         if (positive)
           this.traits.push({name: trait, positive: 1, negative: 0})
-        else {
+        else
           this.traits.push({name: trait, positive: 0, negative: 1})
-        }
       }
     }
   }
@@ -59,6 +59,7 @@ AnswerSchema.methods.udpateTraits = function(userPositiveTraits, userNegativeTra
   _updateAnswerTraits(userPositiveTraits, true)
   _updateAnswerTraits(userNegativeTraits, false)
   this.save()
+}
 
 //Export model
 module.exports = mongoose.model('Answer', AnswerSchema)
