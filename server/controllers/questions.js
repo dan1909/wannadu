@@ -8,23 +8,32 @@ exports.getQuestionsList = async (req, res) => {
   try {
 
     // Existing user questions
-    const userQuestionsIds = await UserQuestion.find({'userId': req.user._id}).distinct('questionId').exec()
-    const answersWithTraits = await Answer.find({traits: {$gt: []}}).distinct('_id').exec()
-    const answersWithNoTraits = await Answer.find({traits: {$eq: []}}).distinct('_id').exec()
+    const userQuestionsIds = await UserQuestion.find({}).
+      where('userId').equals(req.user._id).
+      distinct('questionId').
+      exec()
+
+    const answersWithTraits = await Answer.find({}).
+      where('traits').gt([]).
+      distinct('_id').
+      exec()
 
     // Get questions from DB
-    const questionsWithTraits = await Question.find({
-      'answers': {$in: answersWithTraits },
-      '_id': {$nin: userQuestionsIds}
-    }).limit(consts.MAX_QUESTIONS_WITH_TRAITS).exec()
+    const questionsWithTraits = await Question.find({}).
+      where('answers').in(answersWithTraits).
+      where('_id').nin(userQuestionsIds).
+      limit(consts.MAX_QUESTIONS_WITH_TRAITS).
+      exec()
 
-    const questionsWithNoTraits = await Question.find({
-      'answers': {$in: answersWithNoTraits},
-      '_id': {$nin: userQuestionsIds},
-    }).limit(consts.MAX_QUESTIONS_WITHOUT_TRAITS).exec()
+    const questionsWithTraitsIds = questionsWithTraits.map(a => a._id)
+
+    // Get all remaining questions
+    const questionsWithNoTraits = await Question.find({}).
+      where('_id').nin(userQuestionsIds.concat(questionsWithTraitsIds)).
+      limit(consts.MAX_QUESTIONS_TOTAL - questionsWithTraits.length)
+      .exec()
 
     const questions = questionsWithTraits.concat(questionsWithNoTraits)
-    console.log("!!!!!!!!! questions", questions)
 
     let dataForClient = []
     for (const [questionId, question] of questions.entries()) {
