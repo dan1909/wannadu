@@ -19,42 +19,32 @@ exports.getQuestionsList = async (req, res) => {
       exec()
 
     // Get questions from DB
+
+    // Get questions with traits (we want max MAX_QUESTIONS_WITH_TRAITS)
     const questionsWithTraits = await Question.find({}).
       where('answers').in(answersWithTraits).
       where('_id').nin(userQuestionsIds).
       limit(consts.MAX_QUESTIONS_WITH_TRAITS).
+      populate('answers').
       exec()
 
     const questionsWithTraitsIds = questionsWithTraits.map(a => a._id)
 
-    // Get all remaining questions
-    const questionsWithNoTraits = await Question.find({}).
+    // Get all remaining questions excluding userExisting questions and
+    // questions with traits from before.
+    const remainingQuestions = await Question.find({}).
       where('_id').nin(userQuestionsIds.concat(questionsWithTraitsIds)).
-      limit(consts.MAX_QUESTIONS_TOTAL - questionsWithTraits.length)
-      .exec()
+      limit(consts.MAX_QUESTIONS_TOTAL - questionsWithTraits.length).
+      populate('answers').
+      exec()
 
-    const questions = questionsWithTraits.concat(questionsWithNoTraits)
+    const questionsToClient = remainingQuestions.concat(questionsWithTraits)
 
-    let dataForClient = []
-    for (const [questionId, question] of questions.entries()) {
-      let answerArr = []
-
-      // Get all answers for this question
-      for (let answerId of question.answers) {
-
-        // TODO: can findById()
-        let answerObj = await Answer.findOne(mongoose.Types.ObjectId(answerId)).exec()
-        answerArr.push(answerObj)
-      }
-      dataForClient[questionId] = {'question': question,
-                              'answers': answerArr}
-    }
-
-    // If no questions, return mockData for now....
-    if (questions.length == 0) {
+    // If no questions, empty array
+    if (questionsToClient.length == 0) {
       res.send(JSON.stringify([]))
     } else {
-      res.send(JSON.stringify(dataForClient))
+      res.send(JSON.stringify(questionsToClient))
     }
   } catch (e) {
     console.log ("Error in getting questions", e)

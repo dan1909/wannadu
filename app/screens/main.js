@@ -26,7 +26,7 @@ export default class Main extends Component {
   }
 
   answerClicked = async (answerId) => {
-    const currentQuestionId = this.questions[this.state.qIndex].question._id
+    const currentQuestionId = this.questions[this.state.qIndex]._id
     const data = {
       'question':currentQuestionId,
       'answer': answerId,
