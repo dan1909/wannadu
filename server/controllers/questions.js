@@ -7,9 +7,11 @@ import mongoose from 'mongoose'
 exports.getQuestionsList = async (req, res) => {
   try {
 
-    // Existing user questions
-    const userQuestionsIds = await UserQuestion.find({}).
+    // Existing active user questions (to exclude from questionsto client)
+    const now = new Date()
+    const activeUserQuestionsIds = await UserQuestion.find({}).
       where('userId').equals(req.user._id).
+      where('createdAt').gte(new Date(now.setDate(now.getDate() - consts.USER_QUESTION_EXPIRATION_TIME_DAYS))).
       distinct('questionId').
       exec()
 
@@ -23,7 +25,7 @@ exports.getQuestionsList = async (req, res) => {
     // Get questions with traits (we want max MAX_QUESTIONS_WITH_TRAITS)
     const questionsWithTraits = await Question.find({}).
       where('answers').in(answersWithTraits).
-      where('_id').nin(userQuestionsIds).
+      where('_id').nin(activeUserQuestionsIds).
       limit(consts.MAX_QUESTIONS_WITH_TRAITS).
       populate('answers').
       exec()
@@ -33,7 +35,7 @@ exports.getQuestionsList = async (req, res) => {
     // Get all remaining questions excluding userExisting questions and
     // questions with traits from before.
     const remainingQuestions = await Question.find({}).
-      where('_id').nin(userQuestionsIds.concat(questionsWithTraitsIds)).
+      where('_id').nin(activeUserQuestionsIds.concat(questionsWithTraitsIds)).
       limit(consts.MAX_QUESTIONS_TOTAL - questionsWithTraits.length).
       populate('answers').
       exec()
