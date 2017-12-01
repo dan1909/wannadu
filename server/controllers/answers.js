@@ -20,6 +20,10 @@ const postAnswer = async (req, res) => {
     const answerId = req.body.answer
     const numQuestionAnswered = parseInt(req.body.numQuestionAnswered)
 
+    // udpate total clicked
+    Answer.update({'_id': answerId}, {$inc: {totalClicked: 1}}).exec()
+    Question.update({'_id': questionId}, {$inc: {totalExposures: 1}}).exec()
+
     // Update the UserQuestion
     const userQuestion = new UserQuestion({
       userId: req.user._id,

@@ -1,6 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 var GeneralUtils = require('../utils/GeneralUtils')
+const consts = require('../consts')
 
 var UserSchema = new Schema({
   firstName: { type: String, required: true },
@@ -64,7 +65,7 @@ UserSchema.methods.getActiveUserTraits = function () {
 
     // Check if the trait was updated in the last hour, if so take the lastUpdated
     // ignoring the total positive and negative count
-    if (secondsFromLastUpdate < 3600) {
+    if (secondsFromLastUpdate < consts.USER_ACTIVE_TRAIT_LIMIT) {
       if (traitObj['lastUpdate'] == 'positive')
         userActiveTraits['positive'].push(traitObj['name'])
       else
