@@ -40,7 +40,6 @@ postQuestion = async () => {
 }
 
 postAnswer = async (data) => {
-  console.log("!!!!!! postAnswer", data)
   const token = await AsyncStorage.getItem(consts.TOKEN_KEY)
   const response = await fetch('http://localhost:3000/answers', {
     method: 'POST',
@@ -51,7 +50,12 @@ postAnswer = async (data) => {
     },
     body: JSON.stringify(data)
   })
-  suggestion = await response.json()
+  suggestion = await response.json() || {}
+
+  // If suggestion is empty (no suggestion yet, return null)
+  if (Object.keys(suggestion).length == 0)
+    return null
+    
   return suggestion
 }
 

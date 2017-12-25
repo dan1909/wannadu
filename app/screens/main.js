@@ -36,8 +36,8 @@ export default class Main extends Component {
     // this.setState((prevState) => {result: prevState.result.push(data)})
     this.advanceIndex()
     const suggestion = await questionService.postAnswer(data)
-    console.log("!!!!!!! suggestion", suggestion)
     if (suggestion != null) {
+      console.log("!!!!!! got suggestion!!!!", suggestion)
       this.setState({suggestion: suggestion})
     }
   }

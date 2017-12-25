@@ -8,8 +8,8 @@ const consts = require('../consts')
 import mongoose from 'mongoose'
 
 const getBestSuggestion = async (user) => {
+  // return a random suggestion for now
   const suggestion = await Suggestion.findOne({})
-  console.log("!!!!! getBestSuggestion", suggestion)
   return suggestion
 }
 
@@ -42,12 +42,14 @@ const postAnswer = async (req, res) => {
     answer.udpateTraits(userTraits['positive'], userTraits['negative'])
 
     // If needed, get best suggestion for user
-    if (numQuestionAnswered > consts.MIN_QUESTIONS_FOR_SUGGESTION) {
+    if (numQuestionAnswered >= consts.MIN_QUESTIONS_FOR_SUGGESTION) {
       const suggestion = await getBestSuggestion(req.user)
       res.send(JSON.stringify(suggestion))
     } else {
-      res.send(null)
+      // Not enough questions answered...
+      res.send(JSON.stringify({}))
     }
+
   } catch (e) {
     console.log('PostAnswer:: error posting answer', e)
     res.send({})
