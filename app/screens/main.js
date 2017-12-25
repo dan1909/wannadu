@@ -34,12 +34,13 @@ export default class Main extends Component {
     }
     // Update user result array with question and answer, and update data in DB
     // this.setState((prevState) => {result: prevState.result.push(data)})
-    this.advanceIndex()
+
     const suggestion = await questionService.postAnswer(data)
     if (suggestion != null) {
       console.log("!!!!!! got suggestion!!!!", suggestion)
       this.setState({suggestion: suggestion})
     }
+    this.advanceIndex()
   }
 
   postQuestion = () => {
