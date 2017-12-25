@@ -26,7 +26,6 @@
     "moment": "^2.18.1",
     "mongoose": "^4.12.0",
     "mongoose-find-one-or-create": "^0.2.0",
-    "mongoose-simple-random": "^0.4.1",
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",

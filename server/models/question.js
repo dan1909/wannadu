@@ -1,6 +1,5 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
-var random = require('mongoose-simple-random')
 
 
 var QuestionSchema = new Schema({
@@ -16,9 +15,6 @@ var QuestionSchema = new Schema({
   isActive: {type: Boolean, default: true, required: true},
   isPending: {type: Boolean, default: false, required: true},
 })
-
-// Set random plugin to schema
-QuestionSchema.plugin(random)
 
 //Export model
 module.exports = mongoose.model('Question', QuestionSchema)

@@ -8,8 +8,8 @@ const consts = require('../consts')
 import mongoose from 'mongoose'
 
 const getBestSuggestion = async (user) => {
-  // console.log("!!!!! getBestSuggestion", user)
-  const suggestion = await Suggestion.find()[0]
+  const suggestion = await Suggestion.findOne({})
+  console.log("!!!!! getBestSuggestion", suggestion)
   return suggestion
 }
 

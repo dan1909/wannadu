@@ -1,30 +1,31 @@
 var User = require('../models/user')
 var Answer = require('../models/answer')
 var Question = require('../models/question')
+var Suggestion = require('../models/suggestion')
 var mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 var mongoDB = 'mongodb://localhost/wannadu'
 mongoose.connect(mongoDB, {useMongoClient: true})
 var db = mongoose.connection;
 
-// const createSuggestions = (suggestions) => {
-//   for (let suggestion of suggestions) {
-//     createSuggestion(suggestion)
-//   }
-// }
+const createSuggestions = (suggestions) => {
+  for (let suggestion of suggestions) {
+    createSuggestion(suggestion)
+  }
+}
 //
-// const createSuggestion = async (suggestion) => {
-//   try {
-//     const user = await User.findOne({'email': 'dankovarski@gmail.com'})
-//     suggestion.createdBy = user._id
-//     let s = new Suggestion(suggestion)
-//     await s.save()
-//     console.log("Success!!")
-//
-//   } catch (e) {
-//     console.log("createSuggestion:: Error", e )
-//   }
-// }
+const createSuggestion = async (suggestion) => {
+  try {
+    const user = await User.findOne({'email': 'dankovarski@gmail.com'})
+    suggestion.createdBy = user._id
+    let s = new Suggestion(suggestion)
+    await s.save()
+    console.log("Success!!")
+
+  } catch (e) {
+    console.log("createSuggestion:: Error", e )
+  }
+}
 
 const createQuestions = (questions) => {
   for (let questionObj of questions) {
@@ -80,6 +81,12 @@ const createQuestion = async (questionObj) => {
     console.log("createQuestion:: error", error)
   }
 }
+
+const suggestions = [
+  {content: 'Go to park with friends'},
+  {content: 'Go to movie'},
+  {content: 'Make dinner for your girl'},
+]
 
 const questions = [
 	{question: {type: 'SYSTEM'},
@@ -287,4 +294,5 @@ const questions = [
 // 	'aggregatedTraits': {}  }
 // ]
 
-createQuestions(questions)
+createSuggestions(suggestions)
+// createQuestions(questions)

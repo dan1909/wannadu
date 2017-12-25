@@ -51,6 +51,8 @@ postAnswer = async (data) => {
     },
     body: JSON.stringify(data)
   })
+  suggestion = await response.json()
+  return suggestion
 }
 
 exports.getQuestions = getQuestions
