@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation'
 
-import Result from './screens/result'
+import Suggestion from './screens/suggestion'
 import Main from './screens/main'
 import Login from './screens/login'
 import Settings from './screens/settings'
@@ -25,10 +25,10 @@ const LoginStack = StackNavigator({
   mode: 'modal',
 })
 
-// Main stack - the actual questions and result
+// Main stack - the actual questions and Suggestion
 const MainStack = StackNavigator({
   Main: {screen: Main},
-  Result: {screen: Result}
+  Suggestion: {screen: Suggestion}
 }, {
   headerMode: 'none',
   mode: 'modal',

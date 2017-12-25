@@ -7,17 +7,18 @@ import {
 
 var styles = require('../styles/styles')
 
-  export default class Result extends Component {
+  export default class Suggestion extends Component {
 
   constructor(props) {
     super(props)
-    console.log("DAN Result props", props)
+    this.state = {suggestionContent: ''}
 
   }
 
   componentDidMount() {
     const { params } = this.props.navigation.state
-
+    console.log("!!!! params", params)
+    this.setState({suggestionContent: params.content})
   }
 
   getResults = (results_obj) => {
@@ -32,7 +33,7 @@ var styles = require('../styles/styles')
   render() {
     return (
       <View style={styles.resultContainer}>
-        <Text>Result</Text>
+        <Text>{this.state.suggestionContent}</Text>
         <TouchableHighlight
           onPress={this.load_more_questions}
           style={[styles.button, {backgroundColor: 'green'}]}>

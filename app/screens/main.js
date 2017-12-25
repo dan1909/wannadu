@@ -32,12 +32,9 @@ export default class Main extends Component {
       'answer': answerId,
       'numQuestionAnswered': this.state.qIndex + 1
     }
-    // Update user result array with question and answer, and update data in DB
-    // this.setState((prevState) => {result: prevState.result.push(data)})
 
     const suggestion = await questionService.postAnswer(data)
     if (suggestion != null) {
-      console.log("!!!!!! got suggestion!!!!", suggestion)
       this.setState({suggestion: suggestion})
     }
     this.advanceIndex()
@@ -47,28 +44,24 @@ export default class Main extends Component {
     questionService.postQuestion()
   }
 
-  suggestionClicked = () => {
-    console.log("!!!!! suggestionClicked", this.state.suggestion)
-  }
-
   advanceIndex = () => {
     if (this.state.qIndex + 1 < this.questions.length) {
       this.setState((prevState) => ({
         qIndex: prevState.qIndex + 1
       }))
     } else {
-      this.props.navigation.navigate('Result', 'result')
+      this.props.navigation.navigate('Suggestion', this.state.suggestion)
     }
   }
 
   render() {
     let showSuggestion = <View></View>
-    if (this.state.suggestion != null) {
-      showSuggestion = (<TouchableHighlight
-                    onPress={this.suggestionClicked}>
-                    <Text style={styles.buttonText}>Suggestion</Text>
-                  </TouchableHighlight>)
-    }
+    // if (this.state.suggestion != null) {
+    //   showSuggestion = (<TouchableHighlight
+    //                 onPress={this.suggestionClicked}>
+    //                 <Text style={styles.buttonText}>Suggestion</Text>
+    //               </TouchableHighlight>)
+    // }
 
     if (!this.state.isLoading) {
 
@@ -81,7 +74,7 @@ export default class Main extends Component {
               onPress={this.postQuestion}>
               <Text style={styles.buttonText}>+</Text>
             </TouchableHighlight>
-            {showSuggestion}
+            {/* {showSuggestion} */}
         </View>
       )
     }
