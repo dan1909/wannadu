@@ -83,9 +83,9 @@ const createQuestion = async (questionObj) => {
 }
 
 const suggestions = [
-  {content: 'Go to park with friends'},
-  {content: 'Go to movie'},
-  {content: 'Make dinner for your girl'},
+  {content: 'Go to park with friends', 'traits': [{'name': 'outdoor', 'positive': 100, 'negative': 0}, {'name': 'indoor', 'positive': 0, 'negative': 100}]},
+  {content: 'Go to movie', 'traits': [{'name': 'movie', 'positive': 100, 'negative': 0}]},
+  {content: 'Make dinner for your girl', 'traits': [{'name': 'stay home', 'positive': 100, 'negative': 0}]},
 ]
 
 const questions = [
